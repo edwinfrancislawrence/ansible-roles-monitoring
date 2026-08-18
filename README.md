@@ -29,7 +29,7 @@ monitoring-stack/
 # ⚙️ Prerequisites
 
 * Ansible >= 2.9
-* Ubuntu 3 servers
+* Amazon Linux 3 servers
 * ansible server  need t3.micro 
 * grafna promethous node t3.medium and storage 30 gb min
 * node server t2.micro or t3.medium   and storage 30 gb min
