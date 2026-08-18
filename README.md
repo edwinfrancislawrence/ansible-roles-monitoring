@@ -30,9 +30,9 @@ monitoring-stack/
 
 * Ansible >= 2.9
 * Ubuntu 3 servers
-* ansible server  need t3.micro
-* grafna promethous node t2.medium
-* node server t2.micro or t3.medium   
+* ansible server  need t3.micro 
+* grafna promethous node t3.medium and storage 30 gb min
+* node server t2.micro or t3.medium   and storage 30 gb min
 * SSH access with sudo privileges
 
 ---
