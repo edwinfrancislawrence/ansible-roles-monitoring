@@ -29,7 +29,10 @@ monitoring-stack/
 # ⚙️ Prerequisites
 
 * Ansible >= 2.9
-* Ubuntu/Debian servers
+* Ubuntu 3 servers
+* ansible server  need t3.micro
+* grafna promethous node t2.medium
+* node server t2.micro or t3.medium   
 * SSH access with sudo privileges
 
 ---
@@ -43,10 +46,19 @@ Edit `inventory.ini`:
 monitor1 ansible_host=YOUR_MONITOR_IP
 
 [nodes]
-node1 ansible_host=NODE_IP_1
-node2 ansible_host=NODE_IP_2
+node1 ansible_host=NODE_IP_1      ## grafana promethoous ip
+node2 ansible_host=NODE_IP_2       ### node server ip
 ```
+#  ssh keys 
 
+```
+ssh-keygen -t rsa
+````
+- update the public key in both servers authorized file in .ssh
+- run the ping commnd
+```
+ansible all -m ping -i inventory.ini
+```
 ---
 
 # ▶️ Run Deployment
