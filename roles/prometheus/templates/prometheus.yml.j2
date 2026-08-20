@@ -1,4 +1,4 @@
-global:
+{# global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
@@ -17,7 +17,7 @@ scrape_configs:
 
   - job_name: "ec2-node-exporters"
     ec2_sd_configs:
-      - region: us-east-1
+      - region: us-west-2
         port: 9100
         filters:
           - name: "tag:Name"
@@ -26,4 +26,40 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__meta_ec2_private_ip]
         target_label: __address__
-        replacement: "$1:9100"
+        replacement: "$1:9100" #}
+
+        global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["localhost:9093"]
+
+rule_files:
+  - "alert.rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]  # Note: 9090 is Prometheus itself, 9100 is Node Exporter
+
+  - job_name: "ec2-node-exporters"
+    ec2_sd_configs:
+      - region: us-east-1  # Ensure this matches your ASG region!
+        port: 9100
+        filters:
+          - name: "tag:Name"
+            values: ["node-server"]
+
+    relabel_configs:
+      # Map EC2 Private IP to the scrape target address
+      - source_labels: [__meta_ec2_private_ip]
+        regex: "(.*)"
+        target_label: __address__
+        replacement: "${1}:9100"
+
+      # Clean up the 'instance' label so Grafana displays '172.31.x.x' clearly
+      - source_labels: [__meta_ec2_private_ip]
+        target_label: instance
